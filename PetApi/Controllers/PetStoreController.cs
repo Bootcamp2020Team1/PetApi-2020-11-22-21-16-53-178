@@ -12,29 +12,26 @@ namespace PetApi.Controllers
     public class PetStoreController : ControllerBase
     {
         private static IList<Pet> pets = new List<Pet>();
-        [HttpGet]
-        [Route("Pets")]
+        [HttpGet("Pets")]
         public IEnumerable<Pet> Get()
         {
             return pets;
         }
 
-        //[HttpGet]
-        //public Pet Get()
-        //{
-        //    return "Hello World";
-        //}
+        [HttpGet("{name}")]
+        public Pet GetByName(string name)
+        {
+            return pets.Where(p => p.Name == name).FirstOrDefault();
+        }
 
-        [HttpPost]
-        [Route("AddNewPet")]
+        [HttpPost("AddNewPet")]
         public Pet AddPet(Pet pet)
         {
             pets.Add(pet);
             return pet;
         }
 
-        [HttpDelete]
-        [Route("Clear")]
+        [HttpDelete("Clear")]
         public void Clear()
         {
             pets.Clear();
