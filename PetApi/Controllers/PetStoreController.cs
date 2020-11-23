@@ -36,6 +36,12 @@ namespace PetApi.Controllers
             return pets.Where(p => p.Color == color);
         }
 
+        [HttpGet("PriceRange/min={min}&max={max}")]
+        public IEnumerable<Pet> GetByPriceRange(int min, int max)
+        {
+            return pets.Where(p => p.Price >= min && p.Price <= max);
+        }
+
         [HttpPost("AddNewPet")]
         public Pet AddPet(Pet pet)
         {
