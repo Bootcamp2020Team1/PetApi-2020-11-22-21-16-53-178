@@ -30,6 +30,12 @@ namespace PetApi.Controllers
             return pets.Where(p => p.Type == type);
         }
 
+        [HttpGet("Colors/{color}")]
+        public IEnumerable<Pet> GetByColor(string color)
+        {
+            return pets.Where(p => p.Color == color);
+        }
+
         [HttpPost("AddNewPet")]
         public Pet AddPet(Pet pet)
         {
