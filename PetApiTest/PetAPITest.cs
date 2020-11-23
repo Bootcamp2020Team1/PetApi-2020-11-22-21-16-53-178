@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using PetApi;
 using Xunit;
@@ -112,6 +113,34 @@ namespace PetApiTest
             var responseString = await getResponse.Content.ReadAsStringAsync();
             List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
             Assert.Equal(petList, actualPetList);
+        }
+
+        [Fact]
+        public async Task Should_Modify_Price_Of_Pets_When_Patch()
+        {
+            //given
+            TestServer server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
+            HttpClient client = server.CreateClient();
+            await client.DeleteAsync("petStore/clear");
+
+            Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
+            UpdatePriceModel upDating = new UpdatePriceModel(name: "Baymax", price: 200);
+            Pet updatedPet = new Pet(name: "Baymax", type: "dog", color: "white", price: 200);
+            string request = JsonConvert.SerializeObject(pet);
+            string requestUpdate = JsonConvert.SerializeObject(upDating);
+            StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
+            StringContent updateBody = new StringContent(requestUpdate, Encoding.UTF8, "application/json");
+
+            //when
+            var response = await client.PostAsync("petStore/addNewPet", requestBody);
+            var patchResponse = await client.PatchAsync("petStore/Baymax", updateBody);
+            var getResponse = await client.GetAsync("petStore/petname/Baymax");
+            //then
+            patchResponse.EnsureSuccessStatusCode();
+            var responseString = await patchResponse.Content.ReadAsStringAsync();
+            Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
+            Assert.Equal(updatedPet, actualPet);
         }
     }
 }

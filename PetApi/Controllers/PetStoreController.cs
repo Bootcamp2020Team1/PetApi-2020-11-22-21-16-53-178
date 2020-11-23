@@ -32,6 +32,13 @@ namespace PetApi.Controllers
             return pet;
         }
 
+        [HttpPatch("{updateModel.name}")]
+        public Pet UpdatePriceByName(UpdatePriceModel updateModel)
+        {
+            pets.Where(pet => pet.Name == updateModel.Name).ToList()[0].Price = updateModel.Price;
+            return pets.Where(pet => pet.Name == updateModel.Name).ToList()[0];
+        }
+
         [HttpDelete("petname/{name}")]
         public void DeletePetsByName(string name)
         {
