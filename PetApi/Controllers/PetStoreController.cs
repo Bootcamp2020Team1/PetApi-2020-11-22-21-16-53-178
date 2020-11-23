@@ -11,7 +11,7 @@ namespace PetApi.Controllers
     [Route("[controller]")]
     public class PetStoreController : ControllerBase
     {
-        private List<Pet> pets = new List<Pet>();
+        private static List<Pet> pets = new List<Pet>();
         [HttpPost("addNewPet")]
         public Pet AddPet(Pet pet)
         {
@@ -23,6 +23,24 @@ namespace PetApi.Controllers
         public IEnumerable<Pet> GetAllPets()
         {
             return pets;
+        }
+
+        [HttpDelete("clear")]
+        public void DeletePet()
+        {
+            pets.Clear();
+        }
+
+        [HttpGet("petname/{name}")]
+        public Pet GetPetByName(string name)
+        {
+            return pets.Find(pet => pet.Name == name);
+        }
+
+        [HttpGet("pettype/{type}")]
+        public Pet GetPetByType(string type)
+        {
+            return pets.Find(pet => pet.Type == type);
         }
     }
 }
