@@ -174,5 +174,39 @@ namespace PetApiTest
             List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
             Assert.Equal(petList, actualPetList);
         }
+
+        [Fact]
+        public async Task Should_Get_Correct_Pets_When_Get_By_Price_Range()
+        {
+            //given
+            TestServer server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
+            HttpClient client = server.CreateClient();
+            await client.DeleteAsync("petStore/clear");
+
+            Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
+            Pet pet2 = new Pet(name: "pet2", type: "cat", color: "white", price: 200);
+            var priceRange = new PriceRangeModel(100, 1000);
+            var petList = new List<Pet>()
+            {
+                pet2
+            };
+            string request1 = JsonConvert.SerializeObject(pet1);
+            string request2 = JsonConvert.SerializeObject(pet2);
+            string request3 = JsonConvert.SerializeObject(priceRange);
+            StringContent requestBody1 = new StringContent(request1, Encoding.UTF8, "application/json");
+            StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
+            StringContent requestBody3 = new StringContent(request3, Encoding.UTF8, "application/json");
+            //when
+            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
+            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+
+            var getResponse = await client.PutAsync("petStore/petprice", requestBody3);
+            //then
+            getResponse.EnsureSuccessStatusCode();
+            var responseString = await getResponse.Content.ReadAsStringAsync();
+            List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(petList, actualPetList);
+        }
     }
 }

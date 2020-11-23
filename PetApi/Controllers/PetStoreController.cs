@@ -46,6 +46,12 @@ namespace PetApi.Controllers
             return pets.Where(pet => pet.Name == updateModel.Name).ToList()[0];
         }
 
+        [HttpPut("petprice")]
+        public List<Pet> GetPetsByPriceRange(PriceRangeModel priceRange)
+        {
+            return pets.Where(pet => pet.Price < priceRange.MaxValue && pet.Price > priceRange.MinValue).ToList();
+        }
+
         [HttpDelete("petname/{name}")]
         public void DeletePetsByName(string name)
         {
