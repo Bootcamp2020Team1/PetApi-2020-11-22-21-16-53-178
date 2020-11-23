@@ -32,6 +32,13 @@ namespace PetApi.Controllers
             return pet;
         }
 
+        [HttpGet("pettype/{type}")]
+        public List<Pet> GetPetByType(string type)
+        {
+            var petList = pets.Where(pet => pet.Type == type).ToList();
+            return petList;
+        }
+
         [HttpPatch("{updateModel.name}")]
         public Pet UpdatePriceByName(UpdatePriceModel updateModel)
         {
