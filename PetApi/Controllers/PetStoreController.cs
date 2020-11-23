@@ -63,5 +63,13 @@ namespace PetApi.Controllers
         {
             pets.RemoveAll(pet => pet.Name == name);
         }
+
+        [HttpPatch("petupdateprice")]
+        public Pet UpdatePrice(Pet petUpdated)
+        {
+            pets.RemoveAll(pet => pet.Name == petUpdated.Name);
+            pets.Add(petUpdated);
+            return pets.First(pet => pet.Name == petUpdated.Name);
+        }     
     }
 }
