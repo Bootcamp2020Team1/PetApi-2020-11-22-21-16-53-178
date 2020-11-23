@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using PetApi;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,22 @@ namespace PetApiTest
             var responseString = await response.Content.ReadAsStringAsync();
             Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
             Assert.Equal(pet, actualPet);
+        }
+
+        [Fact]
+        public async Task Should_Return_Pets_When_Get_All_Pet()
+        {
+            TestServer server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
+            HttpClient client = server.CreateClient();
+            //when
+            var response = await client.GetAsync("petStore/pets");
+
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            List<Pet> actualPets = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(new List<Pet>(), actualPets);
         }
     }
 }

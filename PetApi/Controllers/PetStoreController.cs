@@ -18,5 +18,11 @@ namespace PetApi.Controllers
             pets.Add(pet);
             return pet;
         }
+
+        [HttpGet("pets")]
+        public IEnumerable<Pet> GetAllPets()
+        {
+            return pets;
+        }
     }
 }
