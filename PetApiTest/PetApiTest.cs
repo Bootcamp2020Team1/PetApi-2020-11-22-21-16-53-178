@@ -146,5 +146,29 @@ namespace PetApiTest
             List<Pet> actualPets = JsonConvert.DeserializeObject<List<Pet>>(responseString);
             Assert.Equal(new List<Pet>() { cat, dog }, actualPets);
         }
+
+        [Fact]
+        public async Task Should_Delete_Pet_When_Delete_By_Name()
+        {
+            TestServer server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
+            HttpClient client = server.CreateClient();
+            await client.DeleteAsync("petStore/clear");
+
+            Pet cat = new Pet("Moon", "cat", "yellow", 1000);
+            string requestCat = JsonConvert.SerializeObject(cat);
+            StringContent requestBodyCat = new StringContent(requestCat, Encoding.UTF8, "application/json");
+            await client.PostAsync("petStore/addNewPet", requestBodyCat);
+
+            //when
+            await client.DeleteAsync("petStore/petdelete/Moon");
+            var response = await client.GetAsync("petStore/petname/Moon");
+
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
+            Assert.Equal(null, actualPet);
+        }
     }
 }

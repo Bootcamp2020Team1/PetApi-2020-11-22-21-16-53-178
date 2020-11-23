@@ -57,5 +57,11 @@ namespace PetApi.Controllers
             double max = Convert.ToDouble(prices[1]);
             return pets.FindAll(pet => (min <= pet.Price) && (pet.Price <= max));
         }
+
+        [HttpDelete("petdelete/{name}")]
+        public void DeleteAPet(string name)
+        {
+            pets.RemoveAll(pet => pet.Name == name);
+        }
     }
 }
