@@ -31,6 +31,12 @@ namespace PetApi.Controllers
             return pet;
         }
 
+        [HttpDelete("{name}")]
+        public void Delete(string name)
+        {
+            pets.Remove(pets.Where(p => p.Name == name).FirstOrDefault());
+        }
+
         [HttpDelete("Clear")]
         public void Clear()
         {

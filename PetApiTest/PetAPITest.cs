@@ -81,12 +81,13 @@ namespace PetApiTest
             await client.PostAsync("petStore/AddNewPet", requestBody1);
             await client.PostAsync("petStore/AddNewPet", requestBody2);
 
-            var response = await client.DeleteAsync("petStore/{Wuhuang}");
+            await client.DeleteAsync("petStore/Wuhuang");
+            var response = await client.GetAsync("petStore/Pets");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
-            Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
-            Assert.Equal(pet1, actualPet);
+            List<Pet> actualPets = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(new List<Pet> { pet1 }, actualPets);
         }
     }
 }
