@@ -24,6 +24,12 @@ namespace PetApi.Controllers
             return pets.Where(p => p.Name == name).FirstOrDefault();
         }
 
+        [HttpGet("Types/{type}")]
+        public IEnumerable<Pet> GetByType(string type)
+        {
+            return pets.Where(p => p.Type == type);
+        }
+
         [HttpPost("AddNewPet")]
         public Pet AddPet(Pet pet)
         {

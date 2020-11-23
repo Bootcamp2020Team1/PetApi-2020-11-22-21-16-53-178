@@ -99,7 +99,6 @@ namespace PetApiTest
             await client.PostAsync("petStore/AddNewPet", requestBody);
             PetUpdateModel petUpdate = new PetUpdateModel(name: "Baymax", price: 3000);
             StringContent updateRequestBody = new StringContent(JsonConvert.SerializeObject(petUpdate), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", updateRequestBody);
 
             var response = await client.PatchAsync("petStore/Baymax", updateRequestBody);
 
@@ -107,6 +106,25 @@ namespace PetApiTest
             var responseString = await response.Content.ReadAsStringAsync();
             Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
             Assert.Equal(3000, actualPet.Price);
+        }
+
+        [Fact]
+        public async Task Should_return_pets_by_type()
+        {
+            await client.DeleteAsync("petStore/Clear");
+            Pet pet1 = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
+            Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
+            StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
+            StringContent requestBody2 = new StringContent(JsonConvert.SerializeObject(pet2), Encoding.UTF8, "application/json");
+            await client.PostAsync("petStore/AddNewPet", requestBody1);
+            await client.PostAsync("petStore/AddNewPet", requestBody2);
+
+            var response = await client.GetAsync("petStore/Types/cat");
+
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            List<Pet> actualPets = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(new List<Pet> { pet2 }, actualPets);
         }
     }
 }
