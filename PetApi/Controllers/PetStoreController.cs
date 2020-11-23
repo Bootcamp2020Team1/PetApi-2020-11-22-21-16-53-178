@@ -31,6 +31,14 @@ namespace PetApi.Controllers
             return pet;
         }
 
+        [HttpPatch("{name}")]
+        public Pet UpdatePet(string name, PetUpdateModel petUpdate)
+        {
+            var pet = pets.Where(p => p.Name == name).FirstOrDefault();
+            pet.Price = petUpdate.Price;
+            return pet;
+        }
+
         [HttpDelete("{name}")]
         public void Delete(string name)
         {
