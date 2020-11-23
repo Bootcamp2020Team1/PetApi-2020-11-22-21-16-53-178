@@ -38,9 +38,24 @@ namespace PetApi.Controllers
         }
 
         [HttpGet("pettype/{type}")]
-        public Pet GetPetByType(string type)
+        public IEnumerable<Pet> GetPetByType(string type)
         {
-            return pets.Find(pet => pet.Type == type);
+            return pets.FindAll(pet => pet.Type == type);
+        }
+
+        [HttpGet("petcolor/{color}")]
+        public IEnumerable<Pet> GetPetByColor(string color)
+        {
+            return pets.FindAll(pet => pet.Color == color);
+        }
+
+        [HttpGet("petpricerange/{pricerange}")]
+        public IEnumerable<Pet> GetPetByPriceRange(string pricerange)
+        {
+            var prices = pricerange.Split("-");
+            double min = Convert.ToDouble(prices[0]);
+            double max = Convert.ToDouble(prices[1]);
+            return pets.FindAll(pet => (min <= pet.Price) && (pet.Price <= max));
         }
     }
 }
