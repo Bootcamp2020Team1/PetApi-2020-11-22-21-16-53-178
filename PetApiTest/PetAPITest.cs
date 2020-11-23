@@ -208,5 +208,37 @@ namespace PetApiTest
             List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
             Assert.Equal(petList, actualPetList);
         }
+
+        [Fact]
+        public async Task Should_Get_White_Animals_When_Get_By_Color()
+        {
+            //given
+            TestServer server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
+            HttpClient client = server.CreateClient();
+            await client.DeleteAsync("petStore/clear");
+
+            Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
+            Pet pet2 = new Pet(name: "pet2", type: "cat", color: "black", price: 5000);
+            var petList = new List<Pet>()
+            {
+                pet1
+            };
+            string request1 = JsonConvert.SerializeObject(pet1);
+            string request2 = JsonConvert.SerializeObject(pet2);
+            StringContent requestBody1 = new StringContent(request1, Encoding.UTF8, "application/json");
+            StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
+
+            //when
+            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
+            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+
+            var getResponse = await client.GetAsync("petStore/petcolor/white");
+            //then
+            getResponse.EnsureSuccessStatusCode();
+            var responseString = await getResponse.Content.ReadAsStringAsync();
+            List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(petList, actualPetList);
+        }
     }
 }
