@@ -1,18 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using PetApi;
 using Xunit;
 
 namespace PetApiTest
 {
-    public class PetAPITest
+    public class PetApiTest
     {
         // petstore/addNewPet
         [Fact]
@@ -51,7 +49,7 @@ namespace PetApiTest
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
 
             //when
-            var response = await client.PostAsync("petStore/addNewPet", requestBody);
+            await client.PostAsync("petStore/addNewPet", requestBody);
             var getResponse = await client.GetAsync("petStore/pets");
             //then
             getResponse.EnsureSuccessStatusCode();
@@ -74,7 +72,7 @@ namespace PetApiTest
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
 
             //when
-            var response = await client.PostAsync("petStore/addNewPet", requestBody);
+            await client.PostAsync("petStore/addNewPet", requestBody);
             var getResponse = await client.GetAsync("petStore/petname/Baymax");
             //then
             getResponse.EnsureSuccessStatusCode();
@@ -104,8 +102,8 @@ namespace PetApiTest
             StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
 
             //when
-            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
-            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+            await client.PostAsync("petStore/addNewPet", requestBody1);
+            await client.PostAsync("petStore/addNewPet", requestBody2);
             await client.DeleteAsync("petStore/petname/pet1");
             var getResponse = await client.GetAsync("petStore/pets");
             //then
@@ -133,9 +131,9 @@ namespace PetApiTest
             StringContent updateBody = new StringContent(requestUpdate, Encoding.UTF8, "application/json");
 
             //when
-            var response = await client.PostAsync("petStore/addNewPet", requestBody);
+            await client.PostAsync("petStore/addNewPet", requestBody);
             var patchResponse = await client.PatchAsync("petStore/Baymax", updateBody);
-            var getResponse = await client.GetAsync("petStore/petname/Baymax");
+            await client.GetAsync("petStore/petname/Baymax");
             //then
             patchResponse.EnsureSuccessStatusCode();
             var responseString = await patchResponse.Content.ReadAsStringAsync();
@@ -164,8 +162,8 @@ namespace PetApiTest
             StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
 
             //when
-            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
-            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+            await client.PostAsync("petStore/addNewPet", requestBody1);
+            await client.PostAsync("petStore/addNewPet", requestBody2);
 
             var getResponse = await client.GetAsync("petStore/pettype/dog");
             //then
@@ -198,8 +196,8 @@ namespace PetApiTest
             StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
             StringContent requestBody3 = new StringContent(request3, Encoding.UTF8, "application/json");
             //when
-            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
-            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+            await client.PostAsync("petStore/addNewPet", requestBody1);
+            await client.PostAsync("petStore/addNewPet", requestBody2);
 
             var getResponse = await client.PutAsync("petStore/petprice", requestBody3);
             //then
