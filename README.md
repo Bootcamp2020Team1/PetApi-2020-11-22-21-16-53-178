@@ -2,4 +2,4 @@ readmetest
 readmewithEnter'\n'
 readmewith\n  
 readmewithtwospace  
-readmewith"["
+readmewith"["[test]
