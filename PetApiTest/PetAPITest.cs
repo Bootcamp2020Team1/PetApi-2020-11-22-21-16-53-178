@@ -45,7 +45,7 @@ namespace PetApiTest
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
             await client.PostAsync("petStore/AddNewPet", requestBody);
 
-            var response = await client.GetAsync("petStore/Pets");
+            var response = await client.GetAsync("petStore/pets");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -58,9 +58,9 @@ namespace PetApiTest
         {
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             StringContent requestBody = new StringContent(JsonConvert.SerializeObject(pet), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody);
+            await client.PostAsync("petStore/addNewPet", requestBody);
 
-            var response = await client.GetAsync("petStore/Baymax");
+            var response = await client.GetAsync("petStore/pets/Baymax");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();

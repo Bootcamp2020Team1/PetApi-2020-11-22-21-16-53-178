@@ -12,13 +12,13 @@ namespace PetApi.Controllers
     public class PetStoreController : ControllerBase
     {
         private static readonly IList<Pet> pets = new List<Pet>();
-        [HttpGet("Pets")]
+        [HttpGet("pets")]
         public IEnumerable<Pet> Get()
         {
             return pets;
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("pets/{name}")]
         public Pet GetByName(string name)
         {
             return pets.Where(p => p.Name == name).FirstOrDefault();
@@ -34,7 +34,7 @@ namespace PetApi.Controllers
                 (string.IsNullOrEmpty(color) || p.Color == color));
         }
 
-        [HttpPost("AddNewPet")]
+        [HttpPost("addNewPet")]
         public Pet AddPet(Pet pet)
         {
             pets.Add(pet);
