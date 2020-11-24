@@ -12,14 +12,19 @@ namespace PetApiTest
 {
     public class PetApiTest
     {
+        private readonly TestServer server;
+        private readonly HttpClient client;
+        public PetApiTest()
+        {
+            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            client = server.CreateClient();
+        }
+
         // petstore/addNewPet
         [Fact]
         public async Task Should_Add_Pet_When_Add_Pet_()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
@@ -37,9 +42,6 @@ namespace PetApiTest
         public async Task Should_Return_All_Pets_When_Get_All_Pets()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
@@ -62,9 +64,6 @@ namespace PetApiTest
         public async Task Should_Return_Correct_Pets_When_Get_Pets_By_Name()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
@@ -85,9 +84,6 @@ namespace PetApiTest
         public async Task Should_Delete_Pets_When_Delete_By_Name()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
@@ -117,9 +113,6 @@ namespace PetApiTest
         public async Task Should_Modify_Price_Of_Pets_When_Patch()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
@@ -145,9 +138,6 @@ namespace PetApiTest
         public async Task Should_Get_Dogs_When_Get_By_Type()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
@@ -177,9 +167,6 @@ namespace PetApiTest
         public async Task Should_Get_Correct_Pets_When_Put_By_Price_Range()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
@@ -211,9 +198,6 @@ namespace PetApiTest
         public async Task Should_Get_White_Animals_When_Get_By_Color()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
@@ -228,8 +212,8 @@ namespace PetApiTest
             StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
 
             //when
-            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
-            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+            await client.PostAsync("petStore/addNewPet", requestBody1);
+            await client.PostAsync("petStore/addNewPet", requestBody2);
 
             var getResponse = await client.GetAsync("petStore/petcolor/white");
             //then
@@ -243,14 +227,10 @@ namespace PetApiTest
         public async Task Should_Get_Correct_Pets_When_Get_By_Price_Range()
         {
             //given
-            TestServer server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>());
-            HttpClient client = server.CreateClient();
             await client.DeleteAsync("petStore/clear");
 
             Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
             Pet pet2 = new Pet(name: "pet2", type: "cat", color: "white", price: 200);
-            var priceRange = new PriceRangeModel(100, 1000);
             var petList = new List<Pet>()
             {
                 pet2
@@ -260,8 +240,8 @@ namespace PetApiTest
             StringContent requestBody1 = new StringContent(request1, Encoding.UTF8, "application/json");
             StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
             //when
-            var response1 = await client.PostAsync("petStore/addNewPet", requestBody1);
-            var response2 = await client.PostAsync("petStore/addNewPet", requestBody2);
+            await client.PostAsync("petStore/addNewPet", requestBody1);
+            await client.PostAsync("petStore/addNewPet", requestBody2);
 
             var getResponse = await client.GetAsync("petStore/PriceRange?min=100&max=1000");
             //then
