@@ -66,7 +66,6 @@ namespace PetApiTest
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
-
             //when
             await client.PostAsync("petStore/addNewPet", requestBody);
             var getResponse = await client.GetAsync("petStore/pets");
