@@ -12,11 +12,10 @@ namespace PetApiTest
 {
     public class PetApiTest
     {
-        private readonly TestServer server;
+        private readonly TestServer server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
         private readonly HttpClient client;
         public PetApiTest()
         {
-            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
             client = server.CreateClient();
             client.DeleteAsync("petStore/clear");
         }
