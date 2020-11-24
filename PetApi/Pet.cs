@@ -26,12 +26,12 @@ namespace PetApi
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != this.GetType())
+            if (obj == null)
             {
                 return false;
             }
 
-            if (obj as Pet == null)
+            if (obj.GetType() != this.GetType())
             {
                 return false;
             }
