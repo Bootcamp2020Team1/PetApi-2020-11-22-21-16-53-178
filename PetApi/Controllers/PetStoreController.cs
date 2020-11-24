@@ -11,7 +11,7 @@ namespace PetApi.Controllers
     [Route("[controller]")]
     public class PetStoreController : ControllerBase
     {
-        private static IList<Pet> pets = new List<Pet>();
+        private static readonly IList<Pet> pets = new List<Pet>();
         [HttpGet("Pets")]
         public IEnumerable<Pet> Get()
         {
