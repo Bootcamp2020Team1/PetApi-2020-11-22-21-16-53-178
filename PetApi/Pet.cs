@@ -24,14 +24,19 @@ namespace PetApi
         public string Color { get; set; }
         public int Price { get; set; }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj.GetType() != this.GetType())
             {
                 return false;
             }
 
-            return Equals(obj as Pet);
+            if (obj as Pet == null)
+            {
+                return false;
+            }
+
+            return Equals((Pet)obj);
         }
 
         protected bool Equals(Pet other)
