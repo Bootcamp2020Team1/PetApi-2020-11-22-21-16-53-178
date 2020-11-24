@@ -24,22 +24,14 @@ namespace PetApi.Controllers
             return pets.Where(p => p.Name == name).FirstOrDefault();
         }
 
-        [HttpGet("Types/{type}")]
-        public IEnumerable<Pet> GetByType(string type)
-        {
-            return pets.Where(p => p.Type == type);
-        }
-
-        [HttpGet("Colors/{color}")]
-        public IEnumerable<Pet> GetByColor(string color)
-        {
-            return pets.Where(p => p.Color == color);
-        }
-
         [HttpGet]
-        public IEnumerable<Pet> QueryByPriceRange(int? min, int? max)
+        public IEnumerable<Pet> Query(string type, string color, int? min, int? max)
         {
-            return pets.Where(p => p.Price >= min && p.Price <= max);
+            return pets.Where(p => 
+                (min == null || p.Price >= min) &&
+                (max == null || p.Price <= max) &&
+                (string.IsNullOrEmpty(type) || p.Type == type) &&
+                (string.IsNullOrEmpty(color) || p.Color == color));
         }
 
         [HttpPost("AddNewPet")]

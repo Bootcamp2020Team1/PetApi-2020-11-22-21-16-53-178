@@ -114,7 +114,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/AddNewPet", requestBody1);
             await client.PostAsync("petStore/AddNewPet", requestBody2);
 
-            var response = await client.GetAsync("petStore/Types/cat");
+            var response = await client.GetAsync("petStore?type=cat");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -132,7 +132,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/AddNewPet", requestBody1);
             await client.PostAsync("petStore/AddNewPet", requestBody2);
 
-            var response = await client.GetAsync("petStore/Colors/white");
+            var response = await client.GetAsync("petStore?color=white");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
