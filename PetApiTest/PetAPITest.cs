@@ -19,7 +19,7 @@ namespace PetApiTest
         {
             server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
             client = server.CreateClient();
-            client.DeleteAsync("petStore/Clear");
+            client.DeleteAsync("pets/Clear");
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace PetApiTest
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync("petStore/AddNewPet", requestBody);
+            var response = await client.PostAsync("pets/newPet", requestBody);
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -43,9 +43,9 @@ namespace PetApiTest
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody);
+            await client.PostAsync("pets/newPet", requestBody);
 
-            var response = await client.GetAsync("petStore/pets");
+            var response = await client.GetAsync("pets");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -58,9 +58,9 @@ namespace PetApiTest
         {
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             StringContent requestBody = new StringContent(JsonConvert.SerializeObject(pet), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/addNewPet", requestBody);
+            await client.PostAsync("pets/newPet", requestBody);
 
-            var response = await client.GetAsync("petStore/pets/Baymax");
+            var response = await client.GetAsync("pets/Baymax");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -75,11 +75,11 @@ namespace PetApiTest
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
             StringContent requestBody2 = new StringContent(JsonConvert.SerializeObject(pet2), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody1);
-            await client.PostAsync("petStore/AddNewPet", requestBody2);
+            await client.PostAsync("pets/newPet", requestBody1);
+            await client.PostAsync("pets/newPet", requestBody2);
 
-            await client.DeleteAsync("petStore/Wuhuang");
-            var response = await client.GetAsync("petStore/Pets");
+            await client.DeleteAsync("pets/Wuhuang");
+            var response = await client.GetAsync("pets");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -92,11 +92,11 @@ namespace PetApiTest
         {
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             StringContent requestBody = new StringContent(JsonConvert.SerializeObject(pet), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody);
+            await client.PostAsync("pets/newPet", requestBody);
             PetUpdateModel petUpdate = new PetUpdateModel(name: "Baymax", price: 3000);
             StringContent updateRequestBody = new StringContent(JsonConvert.SerializeObject(petUpdate), Encoding.UTF8, "application/json");
 
-            var response = await client.PatchAsync("petStore/Baymax", updateRequestBody);
+            var response = await client.PatchAsync("pets/Baymax", updateRequestBody);
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -111,10 +111,10 @@ namespace PetApiTest
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
             StringContent requestBody2 = new StringContent(JsonConvert.SerializeObject(pet2), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody1);
-            await client.PostAsync("petStore/AddNewPet", requestBody2);
+            await client.PostAsync("pets/newPet", requestBody1);
+            await client.PostAsync("pets/newPet", requestBody2);
 
-            var response = await client.GetAsync("petStore?type=cat");
+            var response = await client.GetAsync("pets?type=cat");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -129,10 +129,10 @@ namespace PetApiTest
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
             StringContent requestBody2 = new StringContent(JsonConvert.SerializeObject(pet2), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody1);
-            await client.PostAsync("petStore/AddNewPet", requestBody2);
+            await client.PostAsync("pets/newPet", requestBody1);
+            await client.PostAsync("pets/newPet", requestBody2);
 
-            var response = await client.GetAsync("petStore?color=white");
+            var response = await client.GetAsync("pets?color=white");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -147,10 +147,10 @@ namespace PetApiTest
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
             StringContent requestBody2 = new StringContent(JsonConvert.SerializeObject(pet2), Encoding.UTF8, "application/json");
-            await client.PostAsync("petStore/AddNewPet", requestBody1);
-            await client.PostAsync("petStore/AddNewPet", requestBody2);
+            await client.PostAsync("pets/newPet", requestBody1);
+            await client.PostAsync("pets/newPet", requestBody2);
 
-            var response = await client.GetAsync("petStore?min=3000&max=4000");
+            var response = await client.GetAsync("pets?min=3000&max=4000");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
