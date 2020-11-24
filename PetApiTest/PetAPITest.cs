@@ -19,12 +19,12 @@ namespace PetApiTest
         {
             server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
             client = server.CreateClient();
+            client.DeleteAsync("petStore/Clear");
         }
 
         [Fact]
         public async Task Should_add_pet()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
@@ -40,7 +40,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_return_all_pets_when_getall()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             string request = JsonConvert.SerializeObject(pet);
             StringContent requestBody = new StringContent(request, Encoding.UTF8, "application/json");
@@ -57,7 +56,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_return_pets_when_get_by_name()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             StringContent requestBody = new StringContent(JsonConvert.SerializeObject(pet), Encoding.UTF8, "application/json");
             await client.PostAsync("petStore/AddNewPet", requestBody);
@@ -73,7 +71,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_remove_pet_when_been_bought()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet1 = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
@@ -93,7 +90,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_modify_price_when_patch()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             StringContent requestBody = new StringContent(JsonConvert.SerializeObject(pet), Encoding.UTF8, "application/json");
             await client.PostAsync("petStore/AddNewPet", requestBody);
@@ -111,7 +107,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_return_pets_by_type()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet1 = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
@@ -130,7 +125,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_return_pets_by_color()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet1 = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
@@ -149,7 +143,6 @@ namespace PetApiTest
         [Fact]
         public async Task Should_return_pets_by_price_range()
         {
-            await client.DeleteAsync("petStore/Clear");
             Pet pet1 = new Pet(name: "Baymax", type: "dog", color: "white", price: 5000);
             Pet pet2 = new Pet(name: "Wuhuang", type: "cat", color: "black", price: 3000);
             StringContent requestBody1 = new StringContent(JsonConvert.SerializeObject(pet1), Encoding.UTF8, "application/json");
