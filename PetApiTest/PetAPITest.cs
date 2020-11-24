@@ -150,7 +150,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/AddNewPet", requestBody1);
             await client.PostAsync("petStore/AddNewPet", requestBody2);
 
-            var response = await client.GetAsync("petStore/PriceRange/min=3000&max=4000");
+            var response = await client.GetAsync("petStore?min=3000&max=4000");
 
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
