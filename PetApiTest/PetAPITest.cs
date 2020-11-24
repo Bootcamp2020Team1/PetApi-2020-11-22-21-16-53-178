@@ -69,12 +69,12 @@ namespace PetApiTest
 
             //when
             await client.PostAsync("petStore/addNewPet", requestBody);
-            var getResponse = await client.GetAsync("petStore/petname/Baymax");
+            var getResponse = await client.GetAsync("petStore/pets");
             //then
             getResponse.EnsureSuccessStatusCode();
             var responseString = await getResponse.Content.ReadAsStringAsync();
-            Pet actualPet = JsonConvert.DeserializeObject<Pet>(responseString);
-            Assert.Equal(pet, actualPet);
+            List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
+            Assert.Equal(pet, actualPetList[0]);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace PetApiTest
             //when
             await client.PostAsync("petStore/addNewPet", requestBody1);
             await client.PostAsync("petStore/addNewPet", requestBody2);
-            await client.DeleteAsync("petStore/petname/pet1");
+            await client.DeleteAsync("petStore/pets/pet1");
             var getResponse = await client.GetAsync("petStore/pets");
             //then
             getResponse.EnsureSuccessStatusCode();
@@ -119,7 +119,7 @@ namespace PetApiTest
             //when
             await client.PostAsync("petStore/addNewPet", requestBody);
             var patchResponse = await client.PatchAsync("petStore/Baymax", updateBody);
-            await client.GetAsync("petStore/petname/Baymax");
+            await client.GetAsync("petStore?name=Baymax");
             //then
             patchResponse.EnsureSuccessStatusCode();
             var responseString = await patchResponse.Content.ReadAsStringAsync();
@@ -146,36 +146,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/addNewPet", requestBody1);
             await client.PostAsync("petStore/addNewPet", requestBody2);
 
-            var getResponse = await client.GetAsync("petStore/pettype?type=dog");
-            //then
-            getResponse.EnsureSuccessStatusCode();
-            var responseString = await getResponse.Content.ReadAsStringAsync();
-            List<Pet> actualPetList = JsonConvert.DeserializeObject<List<Pet>>(responseString);
-            Assert.Equal(petList, actualPetList);
-        }
-
-        [Fact]
-        public async Task Should_Get_Correct_Pets_When_Put_By_Price_Range()
-        {
-            //given
-            Pet pet1 = new Pet(name: "pet1", type: "dog", color: "white", price: 5000);
-            Pet pet2 = new Pet(name: "pet2", type: "cat", color: "white", price: 200);
-            var priceRange = new PriceRangeModel(100, 1000);
-            var petList = new List<Pet>()
-            {
-                pet2
-            };
-            string request1 = JsonConvert.SerializeObject(pet1);
-            string request2 = JsonConvert.SerializeObject(pet2);
-            string request3 = JsonConvert.SerializeObject(priceRange);
-            StringContent requestBody1 = new StringContent(request1, Encoding.UTF8, "application/json");
-            StringContent requestBody2 = new StringContent(request2, Encoding.UTF8, "application/json");
-            StringContent requestBody3 = new StringContent(request3, Encoding.UTF8, "application/json");
-            //when
-            await client.PostAsync("petStore/addNewPet", requestBody1);
-            await client.PostAsync("petStore/addNewPet", requestBody2);
-
-            var getResponse = await client.PutAsync("petStore/petprice", requestBody3);
+            var getResponse = await client.GetAsync("petStore?type=dog");
             //then
             getResponse.EnsureSuccessStatusCode();
             var responseString = await getResponse.Content.ReadAsStringAsync();
@@ -202,7 +173,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/addNewPet", requestBody1);
             await client.PostAsync("petStore/addNewPet", requestBody2);
 
-            var getResponse = await client.GetAsync("petStore/petcolor?color=white");
+            var getResponse = await client.GetAsync("petStore?color=white");
             //then
             getResponse.EnsureSuccessStatusCode();
             var responseString = await getResponse.Content.ReadAsStringAsync();
@@ -228,7 +199,7 @@ namespace PetApiTest
             await client.PostAsync("petStore/addNewPet", requestBody1);
             await client.PostAsync("petStore/addNewPet", requestBody2);
 
-            var getResponse = await client.GetAsync("petStore/PriceRange?min=100&max=1000");
+            var getResponse = await client.GetAsync("petStore?minValue=100&maxValue=1000");
             //then
             getResponse.EnsureSuccessStatusCode();
             var responseString = await getResponse.Content.ReadAsStringAsync();

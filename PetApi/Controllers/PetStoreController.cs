@@ -25,30 +25,13 @@ namespace PetApi.Controllers
             return pets;
         }
 
-        [HttpGet("petname/{name}")]
-        public Pet GetPetByName(string name)
+        [HttpGet]
+        public IList<Pet> GetPetsByAttributes(string type, string color, int? minValue, int? maxValue)
         {
-            var pet = pets.FirstOrDefault(pet => pet.Name == name);
-            return pet;
-        }
-
-        [HttpGet("pettype")]
-        public List<Pet> GetPetsByType(string type)
-        {
-            var petList = pets.Where(pet => pet.Type == type).ToList();
-            return petList;
-        }
-
-        [HttpGet("petcolor")]
-        public List<Pet> GetPetsByColor(string color)
-        {
-            return pets.Where(pet => pet.Color == color).ToList();
-        }
-
-        [HttpGet("PriceRange")]
-        public IEnumerable<Pet> GetByPriceRange(int min, int max)
-        {
-            return pets.Where(p => p.Price >= min && p.Price <= max);
+            return pets.Where(pet => (string.IsNullOrEmpty(type) || pet.Type == type) &&
+                              (string.IsNullOrEmpty(color) || pet.Color == color) &&
+                              (!minValue.HasValue || pet.Price >= minValue) &&
+                              (!maxValue.HasValue || pet.Price <= maxValue)).ToList();
         }
 
         [HttpPatch("{updateModel.name}")]
@@ -64,7 +47,7 @@ namespace PetApi.Controllers
             return pets.Where(pet => pet.Price < priceRange.MaxValue && pet.Price > priceRange.MinValue).ToList();
         }
 
-        [HttpDelete("petname/{name}")]
+        [HttpDelete("pets/{name}")]
         public void DeletePetsByName(string name)
         {
             pets.Remove(pets.FirstOrDefault(deletepet => deletepet.Name == name));
